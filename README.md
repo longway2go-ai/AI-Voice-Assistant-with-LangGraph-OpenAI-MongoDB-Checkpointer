@@ -6,6 +6,7 @@ It uses **LangGraph** for orchestration and a **MongoDB-backed checkpointer** to
 ---
 
 ## 📁 Folder Structure
+```
 
 ├── app/
 │ ├── main.py # Runs the voice assistant loop
@@ -14,6 +15,7 @@ It uses **LangGraph** for orchestration and a **MongoDB-backed checkpointer** to
 ├── requirements.txt # Python dependencies
 └── README.md
 
+```
 ---
 
 ## ✅ Features
