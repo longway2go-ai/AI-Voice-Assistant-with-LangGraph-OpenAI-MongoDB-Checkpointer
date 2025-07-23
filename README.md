@@ -1,4 +1,4 @@
-# 🗣️ Conversational Voice Assistant with OpenAI + LangGraph Checkpointer
+# 🗣️ AI Voice Assistant with LangGraph, OpenAI & MongoDB Checkpointer
 
 This project is a voice-enabled AI assistant that interacts conversationally using OpenAI's language models.  
 It uses **LangGraph** for orchestration and a **MongoDB-backed checkpointer** to maintain conversation state across sessions.
