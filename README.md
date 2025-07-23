@@ -38,18 +38,49 @@ cd voice-agent
 ```
 
 ## Create a virtual environment
-
+```
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Activate it:
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+```
 
 ## Install dependencies
+```
 pip install -r requirements.txt
+```
 
 ## Configure your .env file
-
+```
 OPENAI_API_KEY=your_openai_api_key
 MONGODB_URL=mongodb://localhost:27017  # or your MongoDB Atlas URI
+```
 
 ## 🚀 Run the Assistant
 python app/main.py
-# 🟢 Voice assistant is running. Say something!
+```
+- 🟢 Voice assistant is running. Say something!
+```
+## Technologies Used
+```
+| Tool              | Purpose                                  |
+| ----------------- | ---------------------------------------- |
+| LangGraph         | Graph-based conversational orchestration |
+| OpenAI            | LLM responses (GPT-3.5 / GPT-4)          |
+| MongoDB           | Checkpointer for long-term memory        |
+| SpeechRecognition | Transcribe voice to text                 |
+| Python Dotenv     | Manage API credentials securely          |
+
+```
+
+## License
+MIT License. Feel free to use, modify, and distribute this code.
+
+## Future Plans
+```
+Add Text-to-Speech response
+Web UI using Gradio or Streamlit
+Tool-using agent with web search or calculator
+```
