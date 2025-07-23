@@ -1,40 +1,60 @@
+# main.py
 import os
-from dotenv import load_dotenv
 import speech_recognition as sr
-from .graph import graph  # Correct relative import
+from dotenv import load_dotenv
+from graph import build_graph, get_checkpointer
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
-load_dotenv(override=True)
+load_dotenv()
 
-messages = []
+# ---- Create the assistant ----
+checkpointer = get_checkpointer()
+graph = build_graph(checkpointer)
+
+# ---- Conversation state ----
+messages = [
+    SystemMessage(content="You are a helpful and friendly AI voice assistant. Talk conversationally.")
+]
 
 def main():
-    mic = sr.Recognizer()
+    recognizer = sr.Recognizer()
+
+    print("🟢 Voice assistant is running. Say something!")
+
     with sr.Microphone() as source:
-        mic.adjust_for_ambient_noise(source)
-        mic.pause_threshold = 2
+        recognizer.adjust_for_ambient_noise(source)
+        recognizer.pause_threshold = 1.5
 
         while True:
-            print("🎙️ Speak something.....")
-            audio = mic.listen(source)
-            print("🧠 Processing audio... (Speech-to-Text)")
+            print("\n🎙️ Speak...")
+            audio = recognizer.listen(source)
+
+            print("🧠 Processing speech...")
             try:
-                text = mic.recognize_google(audio)
-                print("✅ You said:", text)
+                text = recognizer.recognize_google(audio)
+                print(f"✅ You said: {text}")
             except sr.UnknownValueError:
-                print("❌ Could not understand audio.")
+                print("❌ Couldn't understand. Try again.")
                 continue
             except sr.RequestError as e:
-                print(f"❌ Could not request results; {e}")
+                print(f"❌ API error: {e}")
                 continue
 
-            # ✅ Pass the transcribed text, not audio
-            messages.append({"role": "user", "content": text})
+            if text.lower() in {"stop", "exit", "quit"}:
+                print("👋 Exiting.")
+                break
 
-            for event in graph.stream({"messages": messages}, stream_mode="values"):
-                if "messages" in event:
-                    last_msg = event["messages"][-1]
-                    messages.append({"role": "assistant", "content": last_msg.content})
-                    last_msg.pretty_print()
+            # Add user message
+            messages.append(HumanMessage(content=text))
+
+            # Run the graph
+            config = {"configurable": {"thread_id": "voice-thread-1"}}
+            for output in graph.stream({"messages": messages}, config=config, stream_mode="values"):
+                if "messages" in output:
+                    assistant_msg = output["messages"][-1]
+                    messages.append(assistant_msg)
+                    print("\n🤖 Assistant:")
+                    print(assistant_msg.content)
 
 if __name__ == "__main__":
     main()
