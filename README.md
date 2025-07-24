@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🎙️ Voice-Activated Shell Assistant with LangGraph & OpenAI
 
 This project is a **voice-controlled command execution assistant** using:
